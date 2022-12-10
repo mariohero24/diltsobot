@@ -39,7 +39,7 @@ async def ready():
 
 admin = bot.create_group("admin", "Admin commands")
 @admin.command(description="Makes the bot say something")
-@commands.has_any_role(1000205572173471744, 1008027971694633060)
+@rolecheck(1000205572173471744, 1008027971694633060)
 async def say(
 				ctx: discord.ApplicationContext,
 				message: discord.Option(description="Message to send") = "** **",

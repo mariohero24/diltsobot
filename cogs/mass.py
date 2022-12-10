@@ -25,7 +25,7 @@ class Mass(commands.Cog):
 
 
 	@mass.command(name="kick", description="Mass kicks members")
-	@commands.has_any_role(1000205572173471744, 1000424453576073306, 1008027971694633060)
+	@rolecheck(1000205572173471744, 1000424453576073306, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def masskick(self, ctx: discord.ApplicationContext, ids: discord.Option(description="IDs to kick"), reason: discord.Option(description="Reason for kicks") = "None"):
 		for id in ids.split():
@@ -40,7 +40,7 @@ class Mass(commands.Cog):
 
 
 	@mass.command(name="ban", description="Mass bans members")
-	@commands.has_any_role(1000205572173471744, 1000424453576073306, 1008027971694633060)
+	@rolecheck(1000205572173471744, 1000424453576073306, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def massban(self, ctx: discord.ApplicationContext, ids: discord.Option(description="IDs to ban"), reason: discord.Option(description="Reason for bans") = "None"):
 		for id in ids.split():
@@ -55,7 +55,7 @@ class Mass(commands.Cog):
 
 	add = mass.create_subgroup("add")
 	@add.command(description="Adds a role to several members")
-	@commands.has_any_role(1000205572173471744, 1008027971694633060)
+	@rolecheck(1000205572173471744, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def role(self, ctx: discord.ApplicationContext, role: discord.Option(discord.Role, description="Role to add"), ids: discord.Option(str, description="IDs to add the role to")):
 		for idstr in ids.split():
@@ -67,7 +67,7 @@ class Mass(commands.Cog):
 
 	
 	@mass.command(description="Purges a channel or member")
-	@commands.has_any_role(1000205572173471744, 1000424453576073306, 1008027971694633060)
+	@rolecheck(1000205572173471744, 1000424453576073306, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def purge(self, ctx: discord.ApplicationContext, count: discord.Option(int, min_value=2, max_value=50, description="How many messages to purge"), member: discord.Option(discord.Member) = None):
 		if member == None:
