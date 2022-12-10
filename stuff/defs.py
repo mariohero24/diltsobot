@@ -31,7 +31,7 @@ async def lockdownmodthing(bot: commands.Bot, mod: discord.Member):
 		duration = datetime.timedelta(days=1)
 		await mod.timeout_for(duration, reason="Mod lockdown")
 		webhook = discord.Webhook.from_url(data.loghook, session=client.session2)
-		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url,  embed=discord.Embed(colour=client.blank(), title=f"{mod} arrested."))
+		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"{mod} arrested."))
 
 def rolecheck(*roles):
 	original = commands.has_any_role(*roles).predicate

@@ -37,7 +37,7 @@ class Lockdown(commands.Cog):
 		else:
 			await ctx.respond("Done")
 			webhook = discord.Webhook.from_url(loghook, session=client.session2)
-			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank(), title=f"Server lockdown toggled by {ctx.author}"))
+			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"Server lockdown toggled by {ctx.author}"))
 
 
 	@lockdown.command(name="staff", description="Locks down the staff team and shuts off the bot")
@@ -65,7 +65,7 @@ class Lockdown(commands.Cog):
 		else:
 			await ctx.respond("Done")
 			webhook = discord.Webhook.from_url(loghook, session=client.session2)
-			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank(), title=f"Staff lockdown toggled by {ctx.author}"))
+			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"Staff lockdown toggled by {ctx.author}"))
 			await asyncio.sleep(5)
 			await self.bot.close()
 

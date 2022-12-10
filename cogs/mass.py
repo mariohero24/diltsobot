@@ -35,7 +35,7 @@ class Mass(commands.Cog):
 		else:
 			webhook = discord.Webhook.from_url(loghook, session=client.session2)
 			await ctx.respond(f"{len(ids.split())} members kicked.")
-			embed = discord.Embed(colour=client.blank(), title="Members masskicked", description=f"{len(ids.split())} members kicked by <@{ctx.author.id}>.")
+			embed = discord.Embed(colour=client.blank, title="Members masskicked", description=f"{len(ids.split())} members kicked by <@{ctx.author.id}>.")
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=embed)
 
 
@@ -50,7 +50,7 @@ class Mass(commands.Cog):
 		else:
 			webhook = discord.Webhook.from_url(loghook, session=client.session2)
 			await ctx.respond(f"{len(ids.split())} members banned.")
-			embed = discord.Embed(colour=client.blank(), title="Members massbanned", description=f"{len(ids.split())} members banned by <@{ctx.author.id}>.")
+			embed = discord.Embed(colour=client.blank, title="Members massbanned", description=f"{len(ids.split())} members banned by <@{ctx.author.id}>.")
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=embed)
 
 	add = mass.create_subgroup("add")
@@ -77,7 +77,7 @@ class Mass(commands.Cog):
 				await msg.delete()
 		await ctx.respond("Done")
 		webhook = discord.Webhook.from_url(loghook, session=client.session2)
-		await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank(), title=f"{count} messages purged by {ctx.author}."))
+		await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"{count} messages purged by {ctx.author}."))
 
 
 

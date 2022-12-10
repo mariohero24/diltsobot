@@ -18,7 +18,7 @@ now = datetime.datetime.now()
 description = ""
 hexa = f"<t:{(time.mktime(now.timetuple()))}:R>".replace(".0", "")
 
-bot = commands.Bot(intents=discord.Intents.all(), owner_ids={935659484695646238, 511012867407872000, 655303532273991691}, command_prefix=commands.when_mentioned_or("/"), help_command=PrettyHelp(color=client.blank(), show_bot_perms=True, no_category="System"))
+bot = commands.Bot(intents=discord.Intents.all(), owner_ids={935659484695646238, 511012867407872000, 655303532273991691}, command_prefix=commands.when_mentioned_or("/"), help_command=PrettyHelp(color=client.blank, show_bot_perms=True, no_category="System"))
 
 extensions = ["cogs.lockdown", "cogs.mass"]
 for extension in extensions:
