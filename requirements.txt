@@ -1,0 +1,5 @@
+aiofiles
+py-cord
+randseal
+jishaku
+pycord-prettyhelp
