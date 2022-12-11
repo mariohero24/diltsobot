@@ -3,3 +3,4 @@ py-cord
 randseal
 jishaku
 pycord-prettyhelp
+advlink

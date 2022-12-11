@@ -1,10 +1,8 @@
 
 from discord.ext import commands
-from stuff.defs import lockdownmodthing, data, client, rolecheck
+from stuff.defs import lockdownmodthing, client, rolecheck, debughook, loghook
 import datetime, time, discord, asyncio, logging
 
-debughook = data.debughook
-loghook = data.loghook
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
 
 now = datetime.datetime.now()
@@ -14,7 +12,7 @@ hexa = f"<t:{(time.mktime(now.timetuple()))}:R>".replace(".0", "")
 
 
 class Mass(commands.Cog):
-	def __init__(self, bot):
+	def __init__(self, bot: commands.Bot):
 		self.bot = bot
 		logging.info(f"{__name__} cog loaded")
 
@@ -33,7 +31,7 @@ class Mass(commands.Cog):
 			member = await ctx.guild.fetch_member(idint)
 			await ctx.guild.kick(member, reason=reason)
 		else:
-			webhook = discord.Webhook.from_url(loghook, session=client.session2)
+			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
 			await ctx.respond(f"{len(ids.split())} members kicked.")
 			embed = discord.Embed(colour=client.blank, title="Members masskicked", description=f"{len(ids.split())} members kicked by <@{ctx.author.id}>.")
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=embed)
@@ -48,7 +46,7 @@ class Mass(commands.Cog):
 			member = await ctx.guild.fetch_member(idint)
 			await ctx.guild.ban(member, reason=reason)
 		else:
-			webhook = discord.Webhook.from_url(loghook, session=client.session2)
+			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
 			await ctx.respond(f"{len(ids.split())} members banned.")
 			embed = discord.Embed(colour=client.blank, title="Members massbanned", description=f"{len(ids.split())} members banned by <@{ctx.author.id}>.")
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=embed)
@@ -69,14 +67,10 @@ class Mass(commands.Cog):
 	@mass.command(description="Purges a channel or member")
 	@rolecheck(1000205572173471744, 1000424453576073306, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
-	async def purge(self, ctx: discord.ApplicationContext, count: discord.Option(int, min_value=2, max_value=50, description="How many messages to purge"), member: discord.Option(discord.Member) = None):
-		if member == None:
-			await ctx.channel.purge(limit=count)
-		else:
-			async for msg in member.history(limit=count):
-				await msg.delete()
+	async def purge(self, ctx: discord.ApplicationContext, count: discord.Option(int, min_value=2, max_value=50, description="How many messages to purge")):
+		await ctx.channel.purge(limit=count)
 		await ctx.respond("Done")
-		webhook = discord.Webhook.from_url(loghook, session=client.session2)
+		webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
 		await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"{count} messages purged by {ctx.author}."))
 
 

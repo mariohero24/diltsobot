@@ -1,0 +1,7 @@
+2022-12-11 11:24:16,286:INFO:Starting up...
+2022-12-11 11:24:19,492:INFO:cogs.lockdown cog loaded
+2022-12-11 11:24:19,499:INFO:cogs.mass cog loaded
+2022-12-11 11:24:20,543:INFO:logging in using static token
+2022-12-11 11:24:21,066:INFO:Shard ID None has sent the IDENTIFY payload.
+2022-12-11 11:24:21,300:INFO:Shard ID None has connected to Gateway: ["gateway-prd-us-east1-b-26l9",{"micros":141305,"calls":["id_created",{"micros":1007,"calls":[]},"session_lookup_time",{"micros":309,"calls":[]},"session_lookup_finished",{"micros":24,"calls":[]},"discord-sessions-blue-prd-2-85",{"micros":139101,"calls":["start_session",{"micros":67042,"calls":["discord-api-5c5c8b6bdc-9wb9r",{"micros":54802,"calls":["get_user",{"micros":11694},"get_guilds",{"micros":13343},"send_scheduled_deletion_message",{"micros":9},"guild_join_requests",{"micros":1},"authorized_ip_coro",{"micros":8}]}]},"starting_guild_connect",{"micros":91,"calls":[]},"presence_started",{"micros":31784,"calls":[]},"guilds_started",{"micros":110,"calls":[]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":40014,"calls":[]},"connect_finished",{"micros":40020,"calls":[]},"build_ready",{"micros":32,"calls":[]},"optimize_ready",{"micros":0,"calls":[]},"split_ready",{"micros":1,"calls":[]},"clean_ready",{"micros":19,"calls":[]}]}]}] (Session ID: 53a5c1b9f8e93dfb71a37007a3b20e1a).
+2022-12-11 11:24:23,334:INFO:Logged in!

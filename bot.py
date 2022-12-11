@@ -1,18 +1,14 @@
 import aiofiles
 from discord.ext.prettyhelp import PrettyHelp
 from discord.ext import commands
-from stuff.defs import lockdownmodthing, data, client, rolecheck
+from stuff.defs import lockdownmodthing, client, rolecheck, debughook, loghook
 import datetime, time, discord, asyncio, logging, os
 
-
-debughook = data.debughook
-loghook = data.loghook
 
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
 with open("output.log") as f:
 	if len(f.read().splitlines()) > 7:
 		logging.info(f"Shutting down...")
-logging.info(f"Starting up...")
 
 now = datetime.datetime.now()
 description = ""
@@ -30,7 +26,7 @@ owner = bot.create_group("bot", "Advanced bot commands")
 @bot.listen('on_ready')
 async def ready():
 	print("Online")
-	q = discord.Webhook.from_url(debughook, session=client.session2)
+	q = discord.Webhook.from_url(debughook.url, session=client.session2)
 	await bot.change_presence(activity=discord.Game(name="with frogs"))
 	logging.info(f"Logged in!")
 	async with aiofiles.open("output.log") as f:
@@ -67,13 +63,9 @@ async def say(
 flag = bot.create_group("flag")
 @flag.command(description="Sets whether you want moderators to be arrested for doing more than 1 mod action per minute")
 @commands.is_owner()
-async def toggle(ctx: discord.ApplicationContext, uwu: discord.Option(name="toggle", description="Figure it out yourself", choices=["Enable", "Disable"])):
-	if uwu == "Enable":
-		tooooo = "OwO"
-	else:
-		tooooo = "UwU"
+async def toggle(ctx: discord.ApplicationContext, uwu: discord.Option(name="toggle", description="Figure it out yourself", choices=[discord.OptionChoice("Enable", "OwO"), discord.OptionChoice("Disable", "UwU")])):
 	async with aiofiles.open("toggle.txt", "w") as f:
-		await f.write(tooooo)
+		await f.write(uwu)
 		await ctx.respond("Done")
 
 
@@ -104,8 +96,13 @@ async def errors(ctx: discord.ApplicationContext, error):
 	elif isinstance(error, commands.MissingAnyRole):
 		await ctx.respond(f"You require one of the following roles to use this command:\n<@&" + ">\n<@&".join(str(sus) for sus in error.missing_roles) + ">", allowed_mentions=discord.AllowedMentions.none())
 	else:
-		webhook = discord.Webhook.from_url(debughook, session=client.session2)
+		webhook = discord.Webhook.from_url(debughook.url, session=client.session2)
 		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url,  content=f"{error}")
+
+
+@bot.listen('on_command_error')
+async def errorpass(ctx, error):
+	pass
 
 
 with open("token.txt") as token:

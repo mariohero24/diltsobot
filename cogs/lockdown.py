@@ -1,19 +1,15 @@
-
 from discord.ext import commands
-from stuff.defs import lockdownmodthing, data, client, rolecheck
+from stuff.defs import lockdownmodthing, client, rolecheck, debughook, loghook
 import datetime, time, discord, asyncio, logging
 
-debughook = data.debughook
-loghook = data.loghook
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
 
-now = datetime.datetime.now()
 description = ""
-hexa = f"<t:{(time.mktime(now.timetuple()))}:R>".replace(".0", "")
+hexa = f"<t:{(time.mktime(datetime.datetime.now().timetuple()))}:R>".replace(".0", "")
 
 
 class Lockdown(commands.Cog):
-	def __init__(self, bot):
+	def __init__(self, bot: commands.Bot):
 		self.bot = bot
 		logging.info(f"{__name__} cog loaded")
 
@@ -36,13 +32,14 @@ class Lockdown(commands.Cog):
 					await member.add_roles(role, reason="Lockdown lifted")
 		else:
 			await ctx.respond("Done")
-			webhook = discord.Webhook.from_url(loghook, session=client.session2)
+			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"Server lockdown toggled by {ctx.author}"))
 
 
 	@lockdown.command(name="staff", description="Locks down the staff team and shuts off the bot")
 	@commands.is_owner()
 	async def lockdownstaff(self, ctx: discord.ApplicationContext):
+		await ctx.defer()
 		mod = ctx
 		staffrole = await client.fetchrole(context=mod, id=1015653001437909123)
 		emojirole = await client.fetchrole(context=mod, id=1023379620348829696)
@@ -63,8 +60,8 @@ class Lockdown(commands.Cog):
 					except:
 						pass
 		else:
-			await ctx.respond("Done")
-			webhook = discord.Webhook.from_url(loghook, session=client.session2)
+			await ctx.send_followup("Done")
+			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"Staff lockdown toggled by {ctx.author}"))
 			await asyncio.sleep(5)
 			await self.bot.close()
