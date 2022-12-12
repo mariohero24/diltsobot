@@ -55,7 +55,7 @@ class Mass(commands.Cog):
 	@add.command(description="Adds a role to several members")
 	@rolecheck(1000205572173471744, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
-	async def role(self, ctx: discord.ApplicationContext, role: discord.Option(discord.Role, description="Role to add"), ids: discord.Option(str, description="IDs to add the role to")):
+	async def role(self, ctx: discord.ApplicationContext, role: discord.Option(discord.Role, description="Role to add"), ids: discord.Option(description="IDs to add the role to")):
 		for idstr in ids.split():
 			idint = int(idstr)
 			member = await ctx.guild.fetch_member(idint)

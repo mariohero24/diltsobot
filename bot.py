@@ -3,7 +3,7 @@ from discord.ext.prettyhelp import PrettyHelp
 from discord.ext import commands
 from stuff.defs import lockdownmodthing, client, rolecheck, debughook, loghook
 import datetime, time, discord, asyncio, logging, os
-
+from traceback import format_exception
 
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
 with open("output.log") as f:
@@ -38,7 +38,7 @@ admin = bot.create_group("admin", "Admin commands")
 @rolecheck(1000205572173471744, 1008027971694633060)
 async def say(
 				ctx: discord.ApplicationContext,
-				message: discord.Option(description="Message to send") = "** **",
+				message: discord.Option(description="Message to send") = "",
 				media: discord.Option(discord.Attachment) = None,
 				channel: discord.Option(discord.TextChannel, description="Channel to send the message to"
 										) = None,
@@ -85,7 +85,7 @@ async def log(ctx: discord.ApplicationContext, message: discord.Option(descripti
 
 
 @bot.listen('on_application_command_error')
-async def errors(ctx: discord.ApplicationContext, error):
+async def errors(ctx: discord.ApplicationContext, error: discord.DiscordException):
 	if isinstance(error, commands.CommandOnCooldown):
 		await ctx.respond(f"Command on cooldown, kinda sussy...", ephemeral=True)
 		async with aiofiles.open("toggle.txt") as f:
@@ -95,9 +95,13 @@ async def errors(ctx: discord.ApplicationContext, error):
 		await ctx.respond("Only <@" + "> and <@".join(str(id) for id in bot.owner_ids) + "> may use this command!", allowed_mentions=discord.AllowedMentions.none())
 	elif isinstance(error, commands.MissingAnyRole):
 		await ctx.respond(f"You require one of the following roles to use this command:\n<@&" + ">\n<@&".join(str(sus) for sus in error.missing_roles) + ">", allowed_mentions=discord.AllowedMentions.none())
+	elif isinstance(error, discord.NotFound):
+		await ctx.send(f"The bot was unable to respond in time")
 	else:
-		webhook = discord.Webhook.from_url(debughook.url, session=client.session2)
-		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url,  content=f"{error}")
+		async with aiofiles.open("error.txt", "w") as f:
+			await f.write(''.join(n for n in format_exception(error)))
+		webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
+		await webhook.send(file=discord.File('error.txt'), username=bot.user.name, avatar_url=bot.user.avatar.url)
 
 
 @bot.listen('on_command_error')
