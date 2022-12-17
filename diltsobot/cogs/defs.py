@@ -5,12 +5,11 @@ from randseal import Client
 from discord.ext import commands
 client = Client()
 
-description = ""
 
 debughook = advlink.Link("https://discord.com/api/webhooks/1047613860514889808/I7o2pJ-DhFRTo4mOwL4mTxxfM5hVSonF0J8M1kJhLDmT2WH--bnnZ56ngSIwWxqXBvpR")
 loghook = advlink.Link("https://discord.com/api/webhooks/1047542583481618473/no81-OCBZmP8HVcUnjfGg_fJJg3Vslcb1w3YHas65924fRolQ5UrBgP4iq-4TZR2I2bd")
 
-async def lockdownmodthing(bot: commands.Bot, mod: discord.Member):
+async def lockdownmodthing(bot: discord.Client, mod: discord.Member):
 	"""Custom function that arrests a user"""
 	staffrole = await client.fetchrole(context=mod, id=1015653001437909123)
 	emojirole = await client.fetchrole(context=mod, id=1023379620348829696)
@@ -31,7 +30,7 @@ async def lockdownmodthing(bot: commands.Bot, mod: discord.Member):
 		duration = datetime.timedelta(days=1)
 		await mod.timeout_for(duration, reason="Mod lockdown")
 		webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
-		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"{mod} arrested."))
+		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url, embed=discord.Embed(colour=client.blank, title=f"{mod} arrested."))
 
 def rolecheck(*roles):
 	original = commands.has_any_role(*roles).predicate

@@ -1,5 +1,5 @@
 from discord.ext import commands
-from stuff.defs import lockdownmodthing, client, rolecheck, debughook, loghook
+from .defs import lockdownmodthing, client, rolecheck, loghook
 import datetime, time, discord, asyncio, logging
 
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
@@ -73,5 +73,5 @@ class Lockdown(commands.Cog):
 		await lockdownmodthing(bot=self.bot, mod=mod)
 		await ctx.respond("Done")
 
-def setup(bot):
+def setup(bot: commands.Bot):
 	bot.add_cog(Lockdown(bot))

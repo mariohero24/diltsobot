@@ -1,0 +1,16 @@
+LICENCE
+MANIFEST.in
+README.md
+pyproject.toml
+setup.cfg
+diltsobot/__init__.py
+diltsobot/bot.py
+diltsobot/main.py
+diltsobot.egg-info/PKG-INFO
+diltsobot.egg-info/SOURCES.txt
+diltsobot.egg-info/dependency_links.txt
+diltsobot.egg-info/top_level.txt
+diltsobot/cogs/core.py
+diltsobot/cogs/defs.py
+diltsobot/cogs/lockdown.py
+diltsobot/cogs/mass.py
