@@ -31,14 +31,3 @@ async def lockdownmodthing(bot: discord.Client, mod: discord.Member):
 		await mod.timeout_for(duration, reason="Mod lockdown")
 		webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
 		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url, embed=discord.Embed(colour=client.blank, title=f"{mod} arrested."))
-
-def rolecheck(*roles):
-	original = commands.has_any_role(*roles).predicate
-	async def extended_check(ctx: discord.ApplicationContext):
-		if ctx.guild == None:
-			return False
-		e=await ctx.bot.application_info()
-		for evil in e.team.members:
-			return ctx.author.id == evil.id
-		await original(ctx)
-	return commands.check(extended_check)

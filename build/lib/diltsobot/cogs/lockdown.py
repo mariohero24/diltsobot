@@ -1,5 +1,5 @@
 from discord.ext import commands
-from .defs import lockdownmodthing, client, rolecheck, loghook
+from .defs import lockdownmodthing, client,  loghook
 import datetime, time, discord, asyncio, logging
 
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
@@ -19,7 +19,7 @@ class Lockdown(commands.Cog):
 	lockdown = discord.SlashCommandGroup("lockdown", "Lockdown commands")
 
 	@lockdown.command(name="server", description="Locks down the server")
-	@rolecheck(1000205572173471744, 1008027971694633060)
+	@commands.has_any_role(1000205572173471744, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def lockdownserver(self, ctx: discord.ApplicationContext, toggle: discord.Option(choices=["Enable", "Disable"], description="Whether to lockdown or unlockdown the server")):
 		async for member in ctx.guild.fetch_members():
@@ -67,7 +67,7 @@ class Lockdown(commands.Cog):
 			await self.bot.close()
 
 	@lockdown.command(name="mod", description="Arrests a moderator")
-	@rolecheck(1000205572173471744, 1008027971694633060)
+	@commands.has_any_role(1000205572173471744, 1008027971694633060)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def lockdownmod(self, ctx: discord.ApplicationContext, mod: discord.Option(discord.Member, description="Moderator to arrest")):
 		await lockdownmodthing(bot=self.bot, mod=mod)

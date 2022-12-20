@@ -2,6 +2,7 @@ import os
 import shutil
 import logging
 from .bot import Bot
+from importlib import resources, metadata
 
 def console(token: str | None=None):
 	"""Console function for... yeah idc"""
@@ -15,8 +16,10 @@ def console(token: str | None=None):
 	command = input("Enter a command or help\n")
 
 	if command == "help":
-		print("start - Starts the bot\ntoken [token] - Sets the bot token\nreset - Resets the entire bot")
+		print("start/run - Starts the bot.\ntoken [token] - Sets the bot token. Set the token to 'token' to use the token parmameter.\nreset - Resets the bot files.")
 		logging.info(f"Help command used")
+		with resources.open_text('diltsobot', 'main.py') as fp:
+			exec(fp.read())
 
 	elif command == "start" or command == "run":
 		if os.path.exists("token.txt"):
@@ -26,6 +29,8 @@ def console(token: str | None=None):
 		else:
 			logging.info(f"Attempted startup but no token was set")
 			print("Token is not set")
+			with resources.open_text('diltsobot', 'main.py') as fp:
+				exec(fp.read())
 
 	elif command.startswith("token"):
 		tok = command.split()[1]
@@ -38,10 +43,14 @@ def console(token: str | None=None):
 				f.write(toke)
 			logging.info(f"Token set")
 			print('Set')
+			with resources.open_text('diltsobot', 'main.py') as fp:
+				exec(fp.read())
 		except:
 			os.remove('token.txt')
 			logging.info("Something went wrong in setting the token")
 			print("Something went wrong in setting the token")
+			with resources.open_text('diltsobot', 'main.py') as fp:
+				exec(fp.read())
 
 	elif command == "reset":
 		try:
@@ -63,8 +72,11 @@ def console(token: str | None=None):
 							try:
 								logging.info('Reset files')
 							finally:
-								pass
+								with resources.open_text('diltsobot', 'main.py') as fp:
+									exec(fp.read())
 
 	else: 
 		print("Unknown command")
 		logging.info(f"Invalid command used")
+
+__version__ = int(metadata.version('diltsobot'))
