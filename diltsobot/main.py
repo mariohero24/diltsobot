@@ -79,4 +79,4 @@ def console(token: str | None=None):
 		print("Unknown command")
 		logging.info(f"Invalid command used")
 
-__version__ = int(metadata.version('diltsobot'))
+__version__: int = int(metadata.version('diltsobot'))

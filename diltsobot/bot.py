@@ -32,7 +32,7 @@ class Bot(commands.Bot):
 		elif isinstance(error, discord.NotFound):
 			await ctx.send(f"The bot was unable to respond in time")
 		else:
-			async with aiofiles.open('error.err') as f:
+			async with aiofiles.open('error.err', 'w') as f:
 				await f.write(''.join(n for n in format_exception(error)))
 				webhook = discord.Webhook.from_url(
 					debughook.url, session=client.session2)
