@@ -77,7 +77,7 @@ class Core(commands.Cog):
 	@commands.is_owner()
 	async def manage(self, ctx: discord.ApplicationContext, action: discord.Option(int, description="What to do", choices=[discord.OptionChoice("Shutdown", 1), discord.OptionChoice("Clear cache", 2)])):
 		q = discord.Webhook.from_url(debughook.url, session=client.session2)
-		await q.edit_message(message_id=1047667970555519036, content="", attachments=[], file=discord.File(fp='output.log', filename="log.py"))
+		await q.edit_message(message_id=1047667970555519036, content=None, attachments=[], file=discord.File(fp='output.log', filename="log.py"), )
 		if action == 1:
 			await q.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url, content=f"Shut down by {ctx.author}")
 			await ctx.respond("Shutting down...")

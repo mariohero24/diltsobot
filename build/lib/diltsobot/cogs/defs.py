@@ -11,14 +11,14 @@ loghook = advlink.Link("https://discord.com/api/webhooks/1047542583481618473/no8
 
 async def lockdownmodthing(bot: discord.Client, mod: discord.Member):
 	"""Custom function that arrests a user"""
-	staffrole = await client.fetchrole(context=mod, id=1015653001437909123)
-	emojirole = await client.fetchrole(context=mod, id=1023379620348829696)
-	trialmodrole = await client.fetchrole(context=mod, id=1020855698663411753)
-	modrole = await client.fetchrole(context=mod, id=1000424453576073306)
-	adrole = await client.fetchrole(context=mod, id=1016386365216272424)
-	devrole = await client.fetchrole(context=mod, id=1047289657051840532)
-	trialadminrole = await client.fetchrole(context=mod, id=1013266611970527253)
-	adminrole = await client.fetchrole(context=mod, id=1008027971694633060)
+	staffrole = discord.Object(1015653001437909123)
+	emojirole = discord.Object(1023379620348829696)
+	trialmodrole = discord.Object(1020855698663411753)
+	modrole = discord.Object(1000424453576073306)
+	adrole = discord.Object(1016386365216272424)
+	devrole = discord.Object(1047289657051840532)
+	trialadminrole = discord.Object(1013266611970527253)
+	adminrole = discord.Object(1008027971694633060)
 	roles = [staffrole, emojirole, trialmodrole, modrole,
 			adrole, devrole, trialadminrole, adminrole]
 	for role in roles:

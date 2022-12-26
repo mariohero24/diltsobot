@@ -1,9 +1,9 @@
 [build-system]
 requires = [
 	"setuptools>=54",
-	"py-cord",
+	"py-cord==2.3.0",
 	"aiofiles",
-	"randseal",
+	"randseal==2.4.0",
 	"jishaku",
 	"pycord-prettyhelp",
 	"advlink",

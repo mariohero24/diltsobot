@@ -23,7 +23,7 @@ class Lockdown(commands.Cog):
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def lockdownserver(self, ctx: discord.ApplicationContext, toggle: discord.Option(choices=["Enable", "Disable"], description="Whether to lockdown or unlockdown the server")):
 		async for member in ctx.guild.fetch_members():
-			role = await client.fetchrole(context=ctx, id=1000424632882581505)
+			role = discord.Object(1000424632882581505)
 			if toggle == "Enable":
 				if role in member.roles:
 					await member.remove_roles(role, reason="Lockdown")
@@ -41,15 +41,15 @@ class Lockdown(commands.Cog):
 	async def lockdownstaff(self, ctx: discord.ApplicationContext):
 		await ctx.defer()
 		mod = ctx
-		staffrole = await client.fetchrole(context=mod, id=1015653001437909123)
-		emojirole = await client.fetchrole(context=mod, id=1023379620348829696)
-		trialmodrole = await client.fetchrole(context=mod, id=1020855698663411753)
-		modrole = await client.fetchrole(context=mod, id=1000424453576073306)
-		adrole = await client.fetchrole(context=mod, id=1016386365216272424)
-		devrole = await client.fetchrole(context=mod, id=1047289657051840532)
-		trialadminrole = await client.fetchrole(context=mod, id=1013266611970527253)
-		adminrole = await client.fetchrole(context=mod, id=1008027971694633060)
-		ignoredrole = await client.fetchrole(context=mod, id=1047384386762453083)
+		staffrole = discord.Object(1015653001437909123)
+		emojirole = discord.Object(1023379620348829696)
+		trialmodrole = discord.Object(1020855698663411753)
+		modrole = discord.Object(1000424453576073306)
+		adrole = discord.Object(1016386365216272424)
+		devrole = discord.Object(1047289657051840532)
+		trialadminrole = discord.Object(1013266611970527253)
+		adminrole = discord.Object(1008027971694633060)
+		ignoredrole = discord.Object(1047384386762453083)
 		roles = [staffrole, emojirole, trialmodrole, modrole,
 				adrole, devrole, trialadminrole, adminrole]
 		async for member in ctx.guild.fetch_members():
