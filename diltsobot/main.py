@@ -1,7 +1,7 @@
 import os
 import shutil
 import logging
-from .bot import Bot
+from .cogs.defs import Bot
 from importlib import resources, metadata
 
 def console(token: str | None=None):

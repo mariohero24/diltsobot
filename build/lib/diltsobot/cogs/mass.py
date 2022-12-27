@@ -1,5 +1,5 @@
 from discord.ext import commands
-from .defs import client,  loghook
+from .defs import client, Hooks, Bot
 import datetime, time, discord, logging
 
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
@@ -11,9 +11,10 @@ hexa = f"<t:{(time.mktime(now.timetuple()))}:R>".replace(".0", "")
 
 
 class Mass(commands.Cog):
-	def __init__(self, bot: commands.Bot):
+	def __init__(self, bot: Bot):
 		self.bot = bot
 		logging.info(f"{__name__} cog loaded")
+		self.hooks = bot.hooks
 
 	def cog_unload(self):
 		logging.info(f"{__name__} cog unloaded")
@@ -30,7 +31,7 @@ class Mass(commands.Cog):
 			member = await ctx.guild.fetch_member(idint)
 			await ctx.guild.kick(member, reason=reason)
 		else:
-			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
+			webhook = discord.Webhook.from_url(self.hooks.loghook, session=client.session2)
 			await ctx.respond(f"{len(ids.split())} members kicked.")
 			embed = discord.Embed(colour=client.blank, title="Members masskicked", description=f"{len(ids.split())} members kicked by <@{ctx.author.id}>.")
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=embed)
@@ -45,7 +46,7 @@ class Mass(commands.Cog):
 			member = await ctx.guild.fetch_member(idint)
 			await ctx.guild.ban(member, reason=reason)
 		else:
-			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
+			webhook = discord.Webhook.from_url(self.hooks.loghook, session=client.session2)
 			await ctx.respond(f"{len(ids.split())} members banned.")
 			embed = discord.Embed(colour=client.blank, title="Members massbanned", description=f"{len(ids.split())} members banned by <@{ctx.author.id}>.")
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=embed)
@@ -70,7 +71,7 @@ class Mass(commands.Cog):
 		await ctx.defer()
 		await ctx.channel.purge(limit=count)
 		await ctx.send_followup("Done")
-		webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
+		webhook = discord.Webhook.from_url(self.hooks.loghook, session=client.session2)
 		await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"{count} messages purged by {ctx.author}."))
 
 

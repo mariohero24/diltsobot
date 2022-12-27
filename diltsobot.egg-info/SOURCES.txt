@@ -4,7 +4,6 @@ README.md
 pyproject.toml
 setup.cfg
 diltsobot/__init__.py
-diltsobot/bot.py
 diltsobot/main.py
 diltsobot.egg-info/PKG-INFO
 diltsobot.egg-info/SOURCES.txt

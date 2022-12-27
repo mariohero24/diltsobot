@@ -1,5 +1,5 @@
 from discord.ext import commands
-from .defs import lockdownmodthing, client,  loghook
+from .defs import lockdownmodthing, client, Hooks, Bot
 import datetime, time, discord, asyncio, logging
 
 logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
@@ -9,9 +9,10 @@ hexa = f"<t:{(time.mktime(datetime.datetime.now().timetuple()))}:R>".replace(".0
 
 
 class Lockdown(commands.Cog):
-	def __init__(self, bot: commands.Bot):
+	def __init__(self, bot: Bot):
 		self.bot = bot
 		logging.info(f"{__name__} cog loaded")
+		self.hooks = bot.hooks
 
 	def cog_unload(self):
 		logging.info(f"{__name__} cog unloaded")
@@ -32,7 +33,7 @@ class Lockdown(commands.Cog):
 					await member.add_roles(role, reason="Lockdown lifted")
 		else:
 			await ctx.respond("Done")
-			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
+			webhook = discord.Webhook.from_url(self.hooks.loghook, session=client.session2)
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"Server lockdown toggled by {ctx.author}"))
 
 
@@ -50,9 +51,9 @@ class Lockdown(commands.Cog):
 		trialadminrole = discord.Object(1013266611970527253)
 		adminrole = discord.Object(1008027971694633060)
 		ignoredrole = discord.Object(1047384386762453083)
-		roles = [staffrole, emojirole, trialmodrole, modrole,
-				adrole, devrole, trialadminrole, adminrole]
-		async for member in ctx.guild.fetch_members():
+		roles = {staffrole, emojirole, trialmodrole, modrole,
+				adrole, devrole, trialadminrole, adminrole}
+		async for member in ctx.guild.fetch_members(limit=ctx.guild.max_members):
 			if not ignoredrole in member.roles:
 				for role in roles:
 					try:
@@ -61,7 +62,7 @@ class Lockdown(commands.Cog):
 						pass
 		else:
 			await ctx.send_followup("Done")
-			webhook = discord.Webhook.from_url(loghook.url, session=client.session2)
+			webhook = discord.Webhook.from_url(self.hooks.loghook, session=client.session2)
 			await webhook.send(username=self.bot.user.name, avatar_url=self.bot.user.avatar.url,  embed=discord.Embed(colour=client.blank, title=f"Staff lockdown toggled by {ctx.author}"))
 			await asyncio.sleep(5)
 			await self.bot.close()
