@@ -1,14 +1,14 @@
 Metadata-Version: 2.1
 Name: diltsobot
-Version: 5
+Version: 6
 Summary: Personal project ig
 Home-page: https://github.com/mariohero24/diltsobot
 Author: Guard Boi
-Author-email: guard@cow.futbol
+Author-email: guard@cowbot.xyz
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.8
+Requires-Python: >=3.10.6
 Description-Content-Type: text/markdown
 License-File: LICENCE
 

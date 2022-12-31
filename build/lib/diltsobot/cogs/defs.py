@@ -22,7 +22,7 @@ async def lockdownmodthing(bot: discord.Client, mod: discord.Member):
 	adrole = discord.Object(1016386365216272424)
 	devrole = discord.Object(1047289657051840532)
 	trialadminrole = discord.Object(1013266611970527253)
-	adminrole = discord.Object(1008027971694633060)
+	adminrole = discord.Object(1008027971694633060, 1047327417338957945)
 	roles = {staffrole, emojirole, trialmodrole, modrole,
 			adrole, devrole, trialadminrole, adminrole}
 	for role in roles:

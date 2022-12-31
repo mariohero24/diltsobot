@@ -3,7 +3,7 @@ requires = [
 	"setuptools>=54",
 	"py-cord==2.3.0",
 	"aiofiles",
-	"randseal==2.4.0",
+	"randseal==3.0.0",
 	"jishaku",
 	"pycord-prettyhelp",
 	"advlink",

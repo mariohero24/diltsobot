@@ -20,7 +20,7 @@ class Lockdown(commands.Cog):
 	lockdown = discord.SlashCommandGroup("lockdown", "Lockdown commands")
 
 	@lockdown.command(name="server", description="Locks down the server")
-	@commands.has_any_role(1000205572173471744, 1008027971694633060)
+	@commands.has_any_role(1000205572173471744, 1008027971694633060, 1047327417338957945)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def lockdownserver(self, ctx: discord.ApplicationContext, toggle: discord.Option(choices=["Enable", "Disable"], description="Whether to lockdown or unlockdown the server")):
 		async for member in ctx.guild.fetch_members():
@@ -49,7 +49,7 @@ class Lockdown(commands.Cog):
 		adrole = discord.Object(1016386365216272424)
 		devrole = discord.Object(1047289657051840532)
 		trialadminrole = discord.Object(1013266611970527253)
-		adminrole = discord.Object(1008027971694633060)
+		adminrole = discord.Object(1008027971694633060, 1047327417338957945)
 		ignoredrole = discord.Object(1047384386762453083)
 		roles = {staffrole, emojirole, trialmodrole, modrole,
 				adrole, devrole, trialadminrole, adminrole}
@@ -68,7 +68,7 @@ class Lockdown(commands.Cog):
 			await self.bot.close()
 
 	@lockdown.command(name="mod", description="Arrests a moderator")
-	@commands.has_any_role(1000205572173471744, 1008027971694633060)
+	@commands.has_any_role(1000205572173471744, 1008027971694633060, 1047327417338957945)
 	@commands.cooldown(rate=1, per=60, type=commands.cooldowns.BucketType.user)
 	async def lockdownmod(self, ctx: discord.ApplicationContext, mod: discord.Option(discord.Member, description="Moderator to arrest")):
 		await lockdownmodthing(bot=self.bot, mod=mod)

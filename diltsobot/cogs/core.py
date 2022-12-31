@@ -31,7 +31,7 @@ class Core(commands.Cog):
 	admin = discord.SlashCommandGroup("admin", "Admin commands")
 	owner = discord.SlashCommandGroup("bot", "Advanced bot commands")
 	@admin.command(description="Makes the bot say something")
-	@commands.has_any_role(1000205572173471744, 1008027971694633060)
+	@commands.has_any_role(1000205572173471744, 1008027971694633060, 1047327417338957945)
 	async def say(self,
 					ctx: discord.ApplicationContext,
 					message: discord.Option(description="Message to send") = "",
@@ -68,7 +68,7 @@ class Core(commands.Cog):
 	@owner.command(description="Shows basic bot information")
 	@commands.is_owner()
 	async def debug(self, ctx: discord.ApplicationContext):
-		await ctx.respond(f"Bot last restarted {hexa}.\nOwners:\n<@" + ">\n<@".join(str(owner) for owner in self.bot.owner_ids) + f">\n{len(self.bot.cogs)}/4 cogs loaded.", file=await client.asyncFile(), allowed_mentions=discord.AllowedMentions.none())
+		await ctx.respond(f"Bot last restarted {hexa}.\nOwners:\n<@" + ">\n<@".join(str(owner) for owner in self.bot.owner_ids) + f">\n{len(self.bot.cogs)}/4 cogs loaded.", file=await client.File(discord.File), allowed_mentions=discord.AllowedMentions.none())
 
 
 	@owner.command(description="Puts something in output.log")
