@@ -12,4 +12,5 @@ diltsobot.egg-info/top_level.txt
 diltsobot/cogs/core.py
 diltsobot/cogs/defs.py
 diltsobot/cogs/lockdown.py
+diltsobot/cogs/managment.py
 diltsobot/cogs/mass.py

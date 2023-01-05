@@ -1,4 +1,4 @@
-import discord, datetime
+import discord, datetime, asyncio
 import aiofiles
 from discord.ext.prettyhelp import PrettyHelp
 from traceback import format_exception
@@ -8,9 +8,10 @@ from discord.ext import commands
 client = Client()
 
 class Hooks:
-	def __init__(self, client: discord.Client) -> None:
-		self.debughook = client.get_message(1057416652226056203).content
-		self.loghook = client.get_message(1057417458232872991).content
+	def __init__(self, client: discord.Client):
+		channel: discord.TextChannel | None = asyncio.run(discord.utils.get_or_fetch(client, "channel", 1047613703702466622))
+		self.debughook = asyncio.run(channel.fetch_message(1057416652226056203)).content
+		self.loghook = asyncio.run(channel.fetch_message(1057417458232872991)).content
 	
 
 async def lockdownmodthing(bot: discord.Client, mod: discord.Member):
@@ -45,7 +46,7 @@ class Bot(commands.Bot):
 			"/"), help_command=PrettyHelp(color=client.blank, show_bot_perms=True, no_category="System"))
 		with open('toggle.txt', 'w') as f:
 			f.write("UwU")
-		self.load_extensions(".cogs.lockdown", ".cogs.mass", ".cogs.core", package="diltsobot")
+		self.load_extensions(".cogs.lockdown", ".cogs.mass", ".cogs.core", ".cogs.managment", package="diltsobot")
 		self.load_extension('jishaku')
 		self.hooks = Hooks(self)
 
