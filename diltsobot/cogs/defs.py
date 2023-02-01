@@ -1,54 +1,40 @@
 import discord, datetime, asyncio
 import aiofiles
 from discord.ext.prettyhelp import PrettyHelp
+from discord import utils
 from traceback import format_exception
-
-from randseal import Client
+loop = asyncio.get_event_loop()
+from randseal import Client, BLANK
 from discord.ext import commands
+from enum import Enum
+
+class ids(Enum):
+	botlogchannel_TextChannel = 1070170166849175552
+	modlogs_TextChannel = 1070214131464032356
+	admin_Role = 1069941851920007248
+	staff_Role = 1070177785915658403
+	immune_Role = 1070207680045658213
+	mod_Role = 1070177368397852813
+	trial_Role = 1070177532026044436
+	botdev_Role = 1070176520166965278
+	member_Role = 1070213193550528562
+	ender_Role = 1070176347860779078
+	diltso_Role = 1070177146456260710
+	override_Role = 1070220701556035604
+	outputlog_Message = 1070226498910429204
+
 client = Client()
-
-class Hooks:
-	def __init__(self, client: discord.Client):
-		channel: discord.TextChannel | None = asyncio.run(discord.utils.get_or_fetch(client, "channel", 1047613703702466622))
-		self.debughook = asyncio.run(channel.fetch_message(1057416652226056203)).content
-		self.loghook = asyncio.run(channel.fetch_message(1057417458232872991)).content
-	
-
-async def lockdownmodthing(bot: discord.Client, mod: discord.Member):
-	"""Custom function that arrests a user"""
-	staffrole = discord.Object(1015653001437909123)
-	emojirole = discord.Object(1023379620348829696)
-	trialmodrole = discord.Object(1020855698663411753)
-	modrole = discord.Object(1000424453576073306)
-	adrole = discord.Object(1016386365216272424)
-	devrole = discord.Object(1047289657051840532)
-	trialadminrole = discord.Object(1013266611970527253)
-	adminrole = discord.Object(1008027971694633060, 1047327417338957945)
-	roles = {staffrole, emojirole, trialmodrole, modrole,
-			adrole, devrole, trialadminrole, adminrole}
-	for role in roles:
-		try:
-			await mod.remove_roles(role, reason="Mod lockdown")
-		except:
-			pass
-	else:
-		duration = datetime.timedelta(days=1)
-		await mod.timeout_for(duration, reason="Mod lockdown")
-		hooks = Hooks(bot)
-		webhook = discord.Webhook.from_url(hooks.loghook, session=client.session2)
-		await webhook.send(username=bot.user.name, avatar_url=bot.user.avatar.url, embed=discord.Embed(colour=client.blank, title=f"{mod} arrested."))
-
 
 class Bot(commands.Bot):
 	"""Bot class cause yes"""
 	def __init__(self):
 		super().__init__(intents=discord.Intents.all(), command_prefix=commands.when_mentioned_or(
-			"/"), help_command=PrettyHelp(color=client.blank, show_bot_perms=True, no_category="System"))
+			"/"), help_command=PrettyHelp(color=BLANK, show_bot_perms=True, no_category="System"))
 		with open('toggle.txt', 'w') as f:
 			f.write("UwU")
-		self.load_extensions(".cogs.lockdown", ".cogs.mass", ".cogs.core", ".cogs.managment", package="diltsobot")
-		self.load_extension('jishaku')
-		self.hooks = Hooks(self)
+		self.load_extensions("diltsobot.cogs.lockdown", "diltsobot.cogs.mass", "diltsobot.cogs.core", "diltsobot.cogs.managment", "jishaku")
+		self.channels = Channels(self)
+		self.ids = ids
 
 	async def on_command_error(self, ctx, error):
 		pass
@@ -68,9 +54,8 @@ class Bot(commands.Bot):
 		else:
 			async with aiofiles.open('error.err', 'w') as f:
 				await f.write(''.join(n for n in format_exception(error)))
-				webhook = discord.Webhook.from_url(
-					self.hooks.debughook, session=client.session2)
-				await webhook.send(file=discord.File('error.err'), username=self.user.name, avatar_url=self.user.avatar.url)
+				e = await self.channels.botlogchannel()
+				await e.send(file=discord.File('error.err'), username=self.user.name, avatar_url=self.user.avatar.url)
 
 
 class view(discord.ui.View):
@@ -80,3 +65,47 @@ class view(discord.ui.View):
 	async def button_callback(self, button: discord.ui.Button, interaction: discord.Interaction):
 		await interaction.response.defer(ephemeral=True)
 		await interaction.delete_original_response()
+
+
+async def lockdownmodthing(bot: Bot, mod: discord.Member):
+	"""Custom function that arrests a user"""
+	staffrole = discord.Object(ids.staff_Role)
+	trialmodrole = discord.Object(ids.trial_Role)
+	modrole = discord.Object(ids.mod_Role)
+	devrole = discord.Object(ids.botdev_Role)
+	adminrole = discord.Object(ids.admin_Role)
+	roles = {staffrole, trialmodrole, modrole, devrole, adminrole}
+	for role in roles:
+		try:
+			await mod.remove_roles(role, reason="Mod lockdown")
+		except:
+			pass
+	else:
+		duration = datetime.timedelta(days=1)
+		await mod.timeout_for(duration, reason="Mod lockdown")
+		chan = await bot.channels.modlogchannel()
+		await chan.send(embed=discord.Embed(colour=BLANK, title=f"{mod} arrested."))
+
+
+class Channels:
+	def __init__(self, bot: Bot):
+		self.bot = bot
+
+	async def botlogchannel(self) -> discord.TextChannel:
+		return await utils.get_or_fetch(self.bot, "channel", ids.botlogchannel_TextChannel)
+
+	async def modlogchannel(self) -> discord.TextChannel:
+		return await utils.get_or_fetch(self.bot, "channel", ids.modlogs_TextChannel)
+
+def needs_any_role(*items: int):
+	idsa = list(items)
+	idsa.append(ids.override_Role)
+	original = commands.has_any_role(*idsa).predicate
+	async def extended_check(ctx: discord.ApplicationContext) -> bool:
+		if ctx.guild == None:
+			return False
+		return await original(ctx)
+	return commands.check(extended_check)
+
+async def get_or_fetch_message(channel: discord.TextChannel, id: int) -> discord.Message:
+	return await utils.get_or_fetch(channel, "message", id)

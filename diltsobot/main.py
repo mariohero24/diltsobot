@@ -4,11 +4,12 @@ import logging
 from .cogs.defs import Bot
 from importlib import resources, metadata
 
+logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s: %(message)s",)
+
+
 def console(token: str | None=None):
 	"""Console function for... yeah idc"""
 	bot = Bot()
-
-	logging.basicConfig(filename="output.log", filemode="a", level=logging.INFO, format="%(asctime)s:%(levelname)s:%(message)s",)
 
 	if not len(open('output.log').read()) >= 1:
 		logging.info(f"Started console")
@@ -78,5 +79,7 @@ def console(token: str | None=None):
 	else: 
 		print("Unknown command")
 		logging.info(f"Invalid command used")
+		with resources.open_text('diltsobot', 'main.py') as fp:
+			exec(fp.read())
 
 __version__ = int(metadata.version('diltsobot'))
